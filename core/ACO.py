@@ -6,7 +6,7 @@ import pygame
 from pygame.locals import (K_0, K_1, KEYDOWN)
 
 ant_num = 2000      # 蚂蚁数量
-elite_ratio = 0  # 蚂蚁中精英的比例
+elite_ratio = 0  # 蚂蚁中精英的初始比例
 ants = []
 
 # 算法相关
@@ -301,6 +301,7 @@ class Ant:
                     self.possible_dires.append(dire)
 
 # 初始化蚂蚁们
+
 
 def createAnts():
     ants.clear()
