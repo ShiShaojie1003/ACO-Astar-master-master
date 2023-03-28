@@ -1,3 +1,4 @@
+import numpy as np
 from random import choice
 from random import random
 import maze
@@ -17,7 +18,7 @@ pheromone_spawn = 1 * pheromone_init  # 出生点的信息素
 evaporate_rate = 0.005  # 蒸发系数
 k = 0.03    # 影响蚂蚁身上的信息素含量的系数
 known_list = []  # 已知的地图
-
+dict_list = []
 # 蚂蚁类
 
 
@@ -196,8 +197,12 @@ class Ant:
         # 这只蚂蚁已经找到食物了，原路返回
         else:
             self.tabu_list_index += 1
+            if self.tabu_list_index == 1:
+                dict_list.append(self.dict)
+
             new_x = self.tabu_list[-self.tabu_list_index][0]    # 走回头路
             new_y = self.tabu_list[-self.tabu_list_index][1]
+
             self.dict -= ((self.x-new_x)**2 + (self.y-new_y)**2) ** 0.5
             self.x = new_x
             self.y = new_y

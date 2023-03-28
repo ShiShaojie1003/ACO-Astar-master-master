@@ -45,16 +45,11 @@ def initMatrix():
         matrix.append([])
         matrix[i] = [pheromone_init]*num_y  # 初始化地图上每个格子的信息素量
 
-    for i in range(wall_num):
-        wallX = randint(0, num_x-1)
-        wallY = randint(0, num_y-1)
-        matrix[wallX][wallY] = "wall"    # 墙壁
-
     global spawnX
     global spawnY
     while True:
-        spawnX = randint(0, num_x-1)
-        spawnY = randint(0, num_y-1)
+        spawnX = 12
+        spawnY = 15
         if canPut(spawnX, spawnY):
             matrix[spawnX][spawnY] = "spawn"    # 出生点
             break
@@ -62,11 +57,15 @@ def initMatrix():
     global foodX
     global foodY
     while True:
-        foodX = randint(0, num_x-1)
-        foodY = randint(0, num_y-1)
+        foodX = 36
+        foodY = 45
         if canPut(foodX, foodY):
             matrix[foodX][foodY] = "food"    # 食物点
             break
+    for i in range(wall_num):
+        wallX = randint(0, num_x-1)
+        wallY = randint(0, num_y-1)
+        matrix[wallX][wallY] = "wall"    # 墙壁
 
 
 if __name__ == '__main__':

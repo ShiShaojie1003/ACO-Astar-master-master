@@ -1,9 +1,11 @@
 import pygame
-from pygame.locals import (K_SPACE, K_UP, KEYDOWN, QUIT,K_0,K_1)
+from pygame.locals import (K_SPACE, K_UP, KEYDOWN,
+                           QUIT, K_0, K_1, K_DOWN, K_LEFT, K_RIGHT, K_r)
 import maze
 from maze import matrix
 import ACO
 import Astar
+import numpy as np
 
 
 class App:
@@ -16,6 +18,8 @@ class App:
         self.HEIGHT = HEIGHT
         self.TEXT_HEIGHT = TEXT_HEIGHT
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT+TEXT_HEIGHT))
+
+        self.clock = pygame.time.Clock()
 
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
@@ -91,7 +95,8 @@ class App:
 
     def drawMap(self):
         self.screen.fill(self.WHITE)   # 背景
-        self.showText("press 'space' to pause, press 'up' to reset, press '0' or '1' to set elite_ratio")
+        self.showText(
+            "press 'space' to pause, press 'R' to reset, press '0' or '1' to set elite_ratio")
 
         if ACO.elite_ratio > 0:
             self.Map()
@@ -138,15 +143,19 @@ class App:
             (self.WIDTH/2), (self.HEIGHT+self.TEXT_HEIGHT/2))  # 显示位置
         self.screen.blit(TextSurface, TextRect)
 
-               
     # 运行
+
     def run(self):
         maze.initMatrix()
         ACO.createAnts()
         Astar.findPath()
         running = self.pause()  # 刚开始先暂停
-
+        self.clock.tick(200000)
         while running:
+            if len(ACO.dict_list) > 2000:
+                print(np.var(ACO.dict_list[-2000:]))
+                if np.var(ACO.dict_list[-2000:]) < 2000:
+                    running = self.pause()
             for event in pygame.event.get():
 
                 if event.type == KEYDOWN:
@@ -154,27 +163,51 @@ class App:
                         running = self.pause()
                     elif event.key == K_0:
                         maze.initMatrix()
-                        ACO.elite_ratio=0
+                        ACO.elite_ratio = 0
                         ACO.createAnts()
                         Astar.findPath()
                         ACO.known_list = []
                     elif event.key == K_1:
                         maze.initMatrix()
-                        ACO.elite_ratio=0.02
+                        ACO.elite_ratio = 0.02
                         ACO.createAnts()
                         Astar.findPath()
                         # ACO.known_list = []
-                    elif event.key == K_UP:     # 按向上重置
-                        maze.initMatrix()
+                    elif event.key == K_r:     # 按r重置
+                        # maze.initMatrix()
                         ACO.createAnts()
                         Astar.findPath()
                         ACO.known_list = []
+                    elif event.key == K_UP:
+                        ACO.alpha += 0.5
+                        ACO.createAnts()
+                        Astar.findPath()
+                        ACO.known_list = []
+                        print("alpha = ", ACO.alpha, "\n")
+                    elif event.key == K_DOWN:
+                        ACO.alpha -= 0.5
+                        ACO.createAnts()
+                        Astar.findPath()
+                        ACO.known_list = []
+                        print("alpha = ", ACO.alpha, "\n")
+                    elif event.key == K_LEFT:
+                        ACO.beta -= 0.5
+                        ACO.createAnts()
+                        Astar.findPath()
+                        ACO.known_list = []
+                        print("beta = ", ACO.beta, "\n")
+                    elif event.key == K_RIGHT:
+                        ACO.beta += 0.5
+                        ACO.createAnts()
+                        Astar.findPath()
+                        ACO.known_list = []
+                        print("beta = ", ACO.beta, "\n")
 
                 elif event.type == pygame.QUIT:  # 退出
                     running = False
-
             self.drawMap()
             pygame.display.flip()   # 画
+            self.clock.tick(200000)
             # --------------
             ACO.moveAnts()
             ACO.globalEvaporate()
