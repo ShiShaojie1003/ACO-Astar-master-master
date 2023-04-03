@@ -203,6 +203,13 @@ class Ant:
             new_x = self.tabu_list[-self.tabu_list_index][0]    # 走回头路
             new_y = self.tabu_list[-self.tabu_list_index][1]
 
+            print("-----------------------------------------\n")
+            print("new_x = ", new_x, "\n")
+            print("new_y = ", new_y, "\n")
+            print("tabu_list = ", self.tabu_list, "\n")
+            print("tabu_list_index = ", self.tabu_list_index, "\n")
+            print("---------------------------------------------\n\n")
+
             self.dict -= abs(self.x-new_x) + abs(self.y-new_y)
             self.x = new_x
             self.y = new_y

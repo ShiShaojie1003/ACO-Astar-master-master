@@ -7,6 +7,8 @@ import ACO
 import Astar
 import numpy as np
 
+import time
+
 
 class App:
     def __init__(self, WIDTH, HEIGHT, TEXT_HEIGHT, SCALE):
@@ -152,10 +154,15 @@ class App:
         running = self.pause()  # 刚开始先暂停
         self.clock.tick(200000)
         while running:
+            start_time = time.time()    # 程序开始时间
             if len(ACO.dict_list) > 2000:
                 print(np.var(ACO.dict_list[-2000:]))
                 if np.var(ACO.dict_list[-2000:]) < 2000:
                     running = self.pause()
+                    end_time = time.time()    # 程序结束时间
+                    run_time = end_time - start_time    # 程序的运行时间，单位为秒
+                    print("\n-------------------------",
+                          "run_time = ", run_time)
                     ACO.dict_list = []
             for event in pygame.event.get():
 
@@ -170,7 +177,7 @@ class App:
                         ACO.known_list = []
                     elif event.key == K_1:
                         maze.initMatrix()
-                        ACO.elite_ratio = 0.002
+                        ACO.elite_ratio = 0.02
                         ACO.createAnts()
                         Astar.findPath()
                         # ACO.known_list = []
@@ -208,7 +215,7 @@ class App:
                     running = False
             self.drawMap()
             pygame.display.flip()   # 画
-            self.clock.tick(200000)
+            self.clock.tick(120)
             # --------------
             ACO.moveAnts()
             ACO.globalEvaporate()
