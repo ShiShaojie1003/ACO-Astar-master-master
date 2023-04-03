@@ -4,8 +4,8 @@ matrix = []     # 整个地图矩阵
 num_x = 50      # 横着能摆50个方块
 num_y = 60      # 竖着能摆60个方块
 wall_num = 1200     # 墙最多1200个
-spawnX, spawnY = 0, 0  # 出生点，起点
-foodX, foodY = 0, 0  # 食物点，终点
+# spawnX, spawnY = 0, 0  # 出生点，起点
+# foodX, foodY = 0, 0  # 食物点，终点
 
 pheromone_init = 1.0  # 初始信息素量
 
@@ -20,7 +20,7 @@ def canPut(x, y):
         return True
     if y-1 > 0 and type(matrix[x][y-1]) != str:
         return True
-    if type(matrix[x+1][y]) != str:
+    if x+1<num_x and type(matrix[x+1][y]) != str:
         return True
     if x+1 < num_x and y+1 < num_y and type(matrix[x+1][y+1]) != str:
         return True
@@ -47,25 +47,26 @@ def initMatrix():
 
     global spawnX
     global spawnY
-    while True:
-        spawnX = 12
-        spawnY = 15
-        if canPut(spawnX, spawnY):
-            matrix[spawnX][spawnY] = "spawn"    # 出生点
-            break
+    # while True:
+    spawnX = 12
+    spawnY = 15
+    # if canPut(spawnX, spawnY):
+    matrix[spawnX][spawnY] = "spawn"    # 出生点
+    # break
 
     global foodX
     global foodY
-    while True:
-        foodX = 36
-        foodY = 45
-        if canPut(foodX, foodY):
-            matrix[foodX][foodY] = "food"    # 食物点
-            break
+    # while True:
+    foodX = 36
+    foodY = 45
+    # if canPut(foodX, foodY):
+    matrix[foodX][foodY] = "food"    # 食物点
+    # break
     for i in range(wall_num):
         wallX = randint(0, num_x-1)
         wallY = randint(0, num_y-1)
-        matrix[wallX][wallY] = "wall"    # 墙壁
+        if canPut(wallX, wallY):
+            matrix[wallX][wallY] = "wall"    # 墙壁
 
 
 if __name__ == '__main__':

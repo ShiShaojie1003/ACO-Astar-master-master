@@ -6,7 +6,7 @@ from maze import (pheromone_init, matrix, num_x, num_y)
 import pygame
 from pygame.locals import (K_0, K_1, KEYDOWN)
 
-ant_num = 2000      # 蚂蚁数量
+ant_num = 1000      # 蚂蚁数量
 elite_ratio = 0  # 蚂蚁中精英的初始比例
 ants = []
 
@@ -200,15 +200,21 @@ class Ant:
             if self.tabu_list_index == 1:
                 dict_list.append(self.dict)
 
+            # print("-----------------------------------------\n")
+            # print("new_x = ", self.x, "\n")
+            # print("new_y = ", self.y, "\n")
+            # print("type = ", matrix[self.x][self.y], "\n")
+            # print("tabu_list_length =", len(self.tabu_list), "\n")
+            # print("tabu_list = ", self.tabu_list, "\n")
+            # print("tabu_list_index = ", self.tabu_list_index, "\n")
+            # print("---------------------------------------------\n\n")
+
+            if (matrix[self.x][self.y] == "spawn"):
+                self.respawn()
+                return
+
             new_x = self.tabu_list[-self.tabu_list_index][0]    # 走回头路
             new_y = self.tabu_list[-self.tabu_list_index][1]
-
-            print("-----------------------------------------\n")
-            print("new_x = ", new_x, "\n")
-            print("new_y = ", new_y, "\n")
-            print("tabu_list = ", self.tabu_list, "\n")
-            print("tabu_list_index = ", self.tabu_list_index, "\n")
-            print("---------------------------------------------\n\n")
 
             self.dict -= abs(self.x-new_x) + abs(self.y-new_y)
             self.x = new_x
@@ -219,11 +225,8 @@ class Ant:
                 matrix[self.x][self.y] = matrix[self.x][self.y] + \
                     self.pheromone / (self.dict_total - self.dict)
 
-            if (matrix[self.x][self.y] == "spawn"):
-                self.respawn()
-                return
-
     # 下个格子的残留信息素量
+
     def getPheromone(self, dire):
         pheromoneX = self.x
         pheromoneY = self.y

@@ -155,15 +155,16 @@ class App:
         self.clock.tick(200000)
         while running:
             start_time = time.time()    # 程序开始时间
-            if len(ACO.dict_list) > 2000:
-                print(np.var(ACO.dict_list[-2000:]))
-                if np.var(ACO.dict_list[-2000:]) < 2000:
-                    running = self.pause()
+            if len(ACO.dict_list) > 1000:
+                print(np.var(ACO.dict_list[-1000:]))
+                if np.var(ACO.dict_list[-1000:]) < 1000:
                     end_time = time.time()    # 程序结束时间
                     run_time = end_time - start_time    # 程序的运行时间，单位为秒
-                    print("\n-------------------------",
+                    print("-------------------------\n",
                           "run_time = ", run_time)
                     ACO.dict_list = []
+                    running = self.pause()
+
             for event in pygame.event.get():
 
                 if event.type == KEYDOWN:
@@ -177,7 +178,7 @@ class App:
                         ACO.known_list = []
                     elif event.key == K_1:
                         maze.initMatrix()
-                        ACO.elite_ratio = 0.02
+                        ACO.elite_ratio = 0.002
                         ACO.createAnts()
                         Astar.findPath()
                         # ACO.known_list = []
