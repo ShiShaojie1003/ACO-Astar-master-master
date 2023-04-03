@@ -106,7 +106,7 @@ class App:
             if not ant.is_elite:    # 普通蚂蚁
                 self.drawPoint(self.PINK, ant.x, ant.y, True, False)
             else:   # 精英蚂蚁
-                self.drawPoint(self.RED, ant.x, ant.y, True, False)
+                self.drawPoint(self.BLACK, ant.x, ant.y, True, False)
 
         for p in Astar.path:   # A*算法的路径
             self.drawPoint(self.PINK, p[0], p[1], False, True)
@@ -156,6 +156,7 @@ class App:
                 print(np.var(ACO.dict_list[-2000:]))
                 if np.var(ACO.dict_list[-2000:]) < 2000:
                     running = self.pause()
+                    ACO.dict_list = []
             for event in pygame.event.get():
 
                 if event.type == KEYDOWN:
@@ -169,7 +170,7 @@ class App:
                         ACO.known_list = []
                     elif event.key == K_1:
                         maze.initMatrix()
-                        ACO.elite_ratio = 0.02
+                        ACO.elite_ratio = 0.002
                         ACO.createAnts()
                         Astar.findPath()
                         # ACO.known_list = []

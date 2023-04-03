@@ -27,8 +27,8 @@ class Ant:
         self.x = spawnX
         self.y = spawnY
         self.is_elite = False
-        length = ((spawnX - maze.foodX)**2 +
-                  (spawnY - maze.foodY)**2) ** 0.5   # 起点与终点距离
+        length = (abs(spawnX - maze.foodX) +
+                  abs(spawnY - maze.foodY))   # 起点与终点距离
         self.pheromone = (pheromone_init * length) / \
             (ant_num * k)  # 蚂蚁身上的信息素含量，找到食物后释放
 
@@ -105,7 +105,7 @@ class Ant:
         if (dx * dy == 0):  # 走直线
             self.dict += 1
         else:               # 走对角线
-            self.dict += 2 ** 0.5
+            self.dict += 2
 
     # 去下一个位置
     def turn(self):
@@ -203,7 +203,7 @@ class Ant:
             new_x = self.tabu_list[-self.tabu_list_index][0]    # 走回头路
             new_y = self.tabu_list[-self.tabu_list_index][1]
 
-            self.dict -= ((self.x-new_x)**2 + (self.y-new_y)**2) ** 0.5
+            self.dict -= abs(self.x-new_x) + abs(self.y-new_y)
             self.x = new_x
             self.y = new_y
 
